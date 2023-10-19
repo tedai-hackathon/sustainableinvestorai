@@ -164,7 +164,7 @@ def main():
                     st.markdown(f"<div style='font-family: Courier New;'>{markdown_html}</div>", unsafe_allow_html=True)
 
 if __name__ == "__main__":
-    os.environ["ANTHROPIC_API_KEY"] = "ANTHROPIC_KEY_HERE"
+    os.environ["ANTHROPIC_API_KEY"] = "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"
     MODEL_NAME = "text-ada-001"
     main()
 

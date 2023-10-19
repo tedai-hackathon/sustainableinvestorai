@@ -61,7 +61,7 @@ class MainBackend:
             
     @st.cache_data
     def pull_company_news(_self, selected_company):
-        AV_API_KEY = "ALPHA_VANTAGE_API_KEY_HERE"
+        AV_API_KEY = "8X52OCUIN0Z13TRG"
         url = "https://www.alphavantage.co/query"
         if selected_company in company_data:
             ticker = company_data[selected_company]["ticker"]
@@ -270,7 +270,7 @@ class MainBackend:
         trustability_score = 0
         num_sustainability_questions = 4
         cnt = 0
-        st.write("Calculating trustability score...")
+        st.write(f"Calculating trustability score...")
         for line in sustainability_inputs:
             question = line[0]
             question_guideline = line[1]

@@ -2,6 +2,7 @@ from enum import Enum
 
 
 class Sector(Enum):
-    HEALTHCARE = ["ABBOTT", "PFIZER", "NOVARTIS"]
+    HEALTHCARE = ["ABBOTT"]
     HARDWARE = ["APPLE"]
-    OILANDGAS = ["BP","MARATHON","SHELL","TOTAL"]
+    OIL_AND_GAS = ["BP","MARATHON","SHELL","TOTAL"]
+    CLOTHING = ["ADIDAS"]

@@ -4,3 +4,4 @@ callbacks
 anthropic
 PyPDF2
 Markdown
+python-dotenv

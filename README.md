@@ -1,9 +1,9 @@
-# 💸 Sustainable Investor AI: 
+# 💹 Sustainable Investor AI: 
 **Empowering Sustainability Investments, One Click at a Time**
 
 SustainableInvestorAI is an investment assistant catered to the needs of financial analysts who need accurate and timely information for sustainability-concious investments. By merging diverse data sources on the environmental and financial performances of companies with recent news streams and leveraging the power of multiple large language models, SustainableInvestorAI aims at painting a comprehensive picture of a company's risk factors, empowering a more holistic approach to investment. 
 
-## Features
+## Featuress
 📊 **Single Company Analysis**:
 - Analyze companies from various industry sectors, generate insights on the financial and sustainability performances.
 - Stay updated with the top news sentiment surrounding the company's sustainability efforts for the past month, do not be surprised by any events. 
@@ -46,12 +46,14 @@ pip install -r requirements.txt
 You can get your API keys here: [AlphaVantage](https://www.alphavantage.co/support/#api-key), [OpenAI](https://openai.com/blog/openai-api), [Anthropic](https://www.anthropic.com/earlyaccess)
 
 ```bash
+
+Create a hidden .env file in your local folder and add the following api keys:
 # add the following API keys
 av_api_key = "ALPHA_VANTAGE API KEY"
 
 openai_api_key = "OPEN AI API KEY"
 
-anthropic_api_key = ANTHROPIC_API_KEY
+anthropic_api_key = "ANTHROPIC_API_KEY"
 
 ```
 

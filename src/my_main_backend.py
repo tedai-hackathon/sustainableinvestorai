@@ -10,7 +10,13 @@ import streamlit as st
 
 from companydata import company_data
 
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
 #selected_company = "BP"
+AV_API_KEY = os.getenv("AV_API_KEY")
 
 class MainBackend:
 
@@ -19,7 +25,7 @@ class MainBackend:
 
     @st.cache_data
     def pull_company_overview(_self,selected_company):
-        AV_API_KEY = "8X52OCUIN0Z13TRG"
+        #AV_API_KEY = os.getenv(AV_API_KEY)
         url = "https://www.alphavantage.co/query"
         if selected_company in company_data:
             ticker = company_data[selected_company]["ticker"]
@@ -61,7 +67,7 @@ class MainBackend:
             
     @st.cache_data
     def pull_company_news(_self, selected_company):
-        AV_API_KEY = "8X52OCUIN0Z13TRG"
+        #AV_API_KEY = os.getenv(AV_API_KEY)
         url = "https://www.alphavantage.co/query"
         if selected_company in company_data:
             ticker = company_data[selected_company]["ticker"]

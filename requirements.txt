@@ -3,3 +3,4 @@ streamlit
 callbacks
 anthropic
 PyPDF2
+Markdown

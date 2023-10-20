@@ -127,7 +127,59 @@ class MainBackend:
             
             return company_title, company_sentiment, company_source, company_url, company_time
 
-        
+    @st.cache_data
+    def generate_prompt_with_user_question_financial(_self, uploaded_file_path, question,selected_company):
+        # Set company information params
+        if selected_company in company_data:
+            company_info = company_data[selected_company]
+            company_name = company_info["name"]
+            company_location = company_info["location"]
+            company_industry = company_info["industry"]
+            
+            # Set up the prompt
+            query = f"""
+            As a senior equity analyst with expertise in analyzing a company's annual financial report, you are presented with the following background information: 
+
+            Company: {company_name}
+            Location: {company_location}
+            Sector: {company_industry}
+            
+            With the above information, please read through the annual financial report and respond to the following question, ensuring to reference the relevant parts in the report. 
+            
+            QUESTION: {question}
+            
+            Please adhere to the following guidelines in your answer: 
+
+            1. Your response must be precise, thorough, and grounded on specific extracts from the report. 
+            2. Answer the question only if you know the answer or can make a well-informed guess; otherwise tell me you don't know it. 
+            3. Read through the whole document and print out all the sentences in the report you base your answer on in the EXCERPT section.
+            4. Keep your ANSWER within 150 words. 
+            
+            Your response to the question should be formatted in JSON with three keys: 
+            
+            1. QUESTION: {question}
+            2. ANSWER: Your answer to the question (be in a string format).
+            3. EXCERPT: The sentences in the report from which you derive your answers to the question. 
+
+            Your FINAL_ANSWER in JSON (ensure there’s no format error):"""
+            
+            reader = PdfReader(uploaded_file_path)
+
+            pdf_name = "".join([company_name,".pdf"])
+            
+            article_text = [f""" {pdf_name} <DOC> """]
+            
+            for page in reader.pages:
+                article_text.append(page.extract_text())
+            article_text.append("""</DOC>""")
+            article_text = "\n\n".join(article_text)
+                
+            prompt = f"{HUMAN_PROMPT} {article_text + query} {AI_PROMPT}"
+                
+            return prompt
+        else:
+            pass
+
     @st.cache_data
     def generate_prompt_with_user_question(_self, uploaded_file_path, question,selected_company):
         # Set company information params

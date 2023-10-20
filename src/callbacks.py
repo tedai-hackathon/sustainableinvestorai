@@ -13,6 +13,5 @@ def click_sector_submit():
 def click_company_submit():
     st.session_state.company_submit = not st.session_state.company_submit
 
-
 def fill_suggested_question():
     st.session_state.q = st.session_state.selected_question

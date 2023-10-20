@@ -15,6 +15,9 @@ from dotenv import load_dotenv
 
 from src.sectors import Sector
 from src.rag_backend import RAGBackend
+import csv
+
+from src.callbacks import *
 
 ## Set API Keys 
 
@@ -33,8 +36,8 @@ st.set_page_config(page_title="Multi-Company Sustainability Report Comparison",
 
 st.title(":chart_with_upwards_trend: Sustainability Report Comparison")
 st.info("""
-INSTRUCTIONS
-""")
+Please select a sector down below and then select companies you want to compare from the drop-down menu. 
+        Type in your question and click "Ask" button.""")
 
 
 def get_rag_backend():
@@ -55,10 +58,22 @@ for sector, col in zip(Sector, columns):
 if len(all_selected_companies) < 2:
     st.error("Please select at least two companies to compare.")
 else:
-    col1, col2 = st.columns([90, 10])
-    question = col1.text_input("##### What do you want to compare across these companies?")
-    col2.markdown("<br>", unsafe_allow_html=True)
-    if col2.button('Ask'):
+    # col1, col2 = st.columns([90, 10])
+    # Obtain cued questions for multicompany analysis
+    csv_path = "./standards/cuedquestionsmulticomp.csv"
+    file_obj = open(csv_path, 'r')
+    reader = csv.reader(file_obj)
+    suggested_questions = []
+    for item in reader:
+        if reader.line_num == 1:  # skipping the header
+            continue
+        suggested_questions.append(item[0])
+    st.radio(label="Suggested Questions", options=suggested_questions, key="selected_question")
+    st.button(label="Use question", on_click=fill_suggested_question)
+    st.text_input(label="question", label_visibility="hidden", placeholder="Ask a question...", key="q")
+    #question = col1.text_input("##### What do you want to compare across these companies?")
+    #col2.markdown("<br>", unsafe_allow_html=True)
+    if st.session_state.q:
         st.write("Please wait while we process your question...")
-        answer = rag_backend.ask_question(question, all_selected_companies)
+        answer = rag_backend.ask_question(st.session_state.q, all_selected_companies)
         st.write(answer)

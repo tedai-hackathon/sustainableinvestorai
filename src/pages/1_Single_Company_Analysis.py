@@ -133,16 +133,18 @@ def main():
                          """)
 
             st.write(f"### Analyze {selected_company} further!")
-
-            # Obtain list of suggested questions from CSV
-            csv_path = "./standards/cuedquestions.csv"
-            file_obj = open(csv_path, 'r')
-            reader = csv.reader(file_obj)
-            suggested_questions = []
-            for item in reader:
-                if reader.line_num == 1:  # skipping the header
-                    continue
-                suggested_questions.append(item[0])
+            
+            col1, col2 = st.columns([1,1])
+            with col1:
+                # Obtain list of suggested questions from CSV
+                csv_path = "./standards/cuedquestionssustainability.csv"
+                file_obj = open(csv_path, 'r')
+                reader = csv.reader(file_obj)
+                suggested_questions = []
+                for item in reader:
+                    if reader.line_num == 1:  # skipping the header
+                        continue
+                    suggested_questions.append(item[0])
 
             st.radio(label="Suggested Questions", options=suggested_questions, key="selected_question")
             st.button(label="Use question", on_click=fill_suggested_question)

@@ -40,7 +40,7 @@ class RAGBackend:
         self.query_engine_tools = {}
 
         load_dotenv()
-        llm = OpenAI(temperature=0, model_name="text-davinci-003", max_tokens=-1)
+        llm = OpenAI(temperature=0, model_name="gpt-4", max_tokens=-1)
         #llm = ChatOpenAI(temperature=0, model_name="gpt-4", max_tokens=-1)
 
         service_context = ServiceContext.from_defaults(llm=llm)

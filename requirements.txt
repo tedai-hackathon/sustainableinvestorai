@@ -7,3 +7,5 @@ Markdown
 python-dotenv
 pycryptodome
 streamlit-aggrid
+llamaindex
+Langchain

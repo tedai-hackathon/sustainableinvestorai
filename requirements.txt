@@ -6,3 +6,4 @@ PyPDF2
 Markdown
 python-dotenv
 pycryptodome
+streamlit-aggrid

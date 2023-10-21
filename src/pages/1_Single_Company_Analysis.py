@@ -77,13 +77,14 @@ def main():
             #report_folder_path = f"./reports/{selected_company}/"
             #report_path = os.path.join(report_folder_path, os.listdir(report_folder_path)[0])
             report_path = f"./reports/{selected_company}/{selected_company}.pdf"
+            report_path_fin = f"./reports/{selected_company}/{selected_company}_fin.pdf"
             with st.status("**Generating Insights...**"):
                 # Company Overview
                 overview = backend.pull_company_overview(selected_company)
                 st.write(f"Gathering {selected_company}'s company information")
                 # Report summarization 
                 summarising_question = "Please summarize the article"
-                response_dict = backend.generate_response_for_user_question(report_path, summarising_question,selected_company)
+                response_dict = backend.generate_response_for_user_question(report_path, summarising_question,selected_company,"sus")
                 st.write(f"📝 Summarising {selected_company}'s sustainability report")
             
             col1, col2 = st.columns([2,1])
@@ -145,28 +146,62 @@ def main():
                     if reader.line_num == 1:  # skipping the header
                         continue
                     suggested_questions.append(item[0])
+                    
+                st.radio(label="Suggested Sustainability Questions", options=suggested_questions, key="selected_question_sus")
+                st.button(label="Ask Sustainability Report", on_click=fill_suggested_question)
+                    
+                st.text_input(label="question", label_visibility="hidden", placeholder="Ask a question...", key="q")
 
-            st.radio(label="Suggested Questions", options=suggested_questions, key="selected_question")
-            st.button(label="Use question", on_click=fill_suggested_question)
+            with col2:
+                csv_path_fin = "./standards/cuedquestionsfinance.csv"
+                file_obj_fin = open(csv_path_fin, 'r')
+                reader = csv.reader(file_obj_fin)
+                suggested_questions_fin = []
+                for item in reader:
+                    if reader.line_num == 1:  # skipping the header
+                        continue
+                    suggested_questions_fin.append(item[0])
 
-            st.text_input(label="question", label_visibility="hidden", placeholder="Ask a question...", key="q")
+                st.radio(label="Suggested Financial Questions", options=suggested_questions_fin, key="selected_question_fin")
+                st.button(label="Ask Financial Report", on_click=fill_suggested_question_fin)
+                    
+                st.text_input(label="question", label_visibility="hidden", placeholder="Ask a question...", key="q_fin")
 
-            if st.session_state.q:
-                response_dict = backend.generate_response_for_user_question(report_path, st.session_state.q,selected_company)
-                st.write("### ✏️ Answer")
-                col1, buf, col2 = st.columns([10, 0.5, 3])
-                col1.write(response_dict["ANSWER"])
-                col2.info(f"""
-                Trustability Score: {trustability_score:.2f}/5\n
-                [{selected_company}'s Sustainability Report](about:blank)\n
-                """)
+            
+            col1, col2 = st.columns([1,1])
+            with col1:
+                if st.session_state.q:
+                    response_dict = backend.generate_response_for_user_question(report_path, st.session_state.q,selected_company,"sus")
+                    st.write("### ✏️ Answer")
+                    col1, buf, col2 = st.columns([10, 0.5, 3])
+                    col1.write(response_dict["ANSWER"])
+                    col2.info(f"""
+                    Trustability Score: {trustability_score:.2f}/5\n
+                    [{selected_company}'s Sustainability Report](about:blank)\n
+                    """)
 
-                st.write("**Not confident of the answer?**")
-                if st.checkbox(label="**Examine the relevant excerpts from the report!**"):
-                    quoted_excerpts = ['"' + excerpt + '"' for excerpt in response_dict["EXCERPT"]]
-                    markdown_text = "\n".join(f"* {item}" for item in quoted_excerpts)
-                    markdown_html = markdown.markdown(markdown_text)
-                    st.markdown(f"<div style='font-family: Courier New;'>{markdown_html}</div>", unsafe_allow_html=True)
+                    st.write("**Not confident of the answer?**")
+                    if st.checkbox(label="**Examine the relevant excerpts from the report!**"):
+                        quoted_excerpts = ['"' + excerpt + '"' for excerpt in response_dict["EXCERPT"]]
+                        markdown_text = "\n".join(f"* {item}" for item in quoted_excerpts)
+                        markdown_html = markdown.markdown(markdown_text)
+                        st.markdown(f"<div style='font-family: Courier New;'>{markdown_html}</div>", unsafe_allow_html=True)
+            with col2:
+                if st.session_state.q_fin:
+                    response_dict = backend.generate_response_for_user_question(report_path, st.session_state.q_fin,selected_company,"fin")
+                    st.write("### ✏️ Answer")
+                    st.write(response_dict["ANSWER"])
+                    
+                    st.write("**Not confident of the answer?**")
+                    if st.checkbox(label="**Examine the relevant excerpts from the report!**"):
+                        quoted_excerpts = ['"' + excerpt + '"' for excerpt in response_dict["EXCERPT"]]
+                        markdown_text = "\n".join(f"* {item}" for item in quoted_excerpts)
+                        markdown_html = markdown.markdown(markdown_text)
+                        st.markdown(f"<div style='font-family: Courier New;'>{markdown_html}</div>", unsafe_allow_html=True)
+
+
+
+            
 
 if __name__ == "__main__":
     os.environ["ANTHROPIC_API_KEY"] = os.getenv("ANTHROPIC_API_KEY")

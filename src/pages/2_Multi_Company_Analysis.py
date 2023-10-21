@@ -68,12 +68,12 @@ else:
         if reader.line_num == 1:  # skipping the header
             continue
         suggested_questions.append(item[0])
-    st.radio(label="Suggested Questions", options=suggested_questions, key="selected_question")
-    st.button(label="Use question", on_click=fill_suggested_question)
-    st.text_input(label="question", label_visibility="hidden", placeholder="Ask a question...", key="q")
+    st.radio(label="Suggested Questions", options=suggested_questions, key="chosen_question")
+    st.button(label="Use question", on_click=fill_chosen_question)
+    st.text_input(label="question", label_visibility="hidden", placeholder="Ask a question...", key="qu")
     #question = col1.text_input("##### What do you want to compare across these companies?")
     #col2.markdown("<br>", unsafe_allow_html=True)
-    if st.session_state.q:
+    if st.session_state.qu:
         st.write("Please wait while we process your question...")
-        answer = rag_backend.ask_question(st.session_state.q, all_selected_companies)
+        answer = rag_backend.ask_question(st.session_state.qu, all_selected_companies)
         st.write(answer)
